@@ -1,0 +1,6 @@
+python 3.11.9
+pytorch 2.3.1+cpu
+numpy
+gym
+matplottlib
+scipy
