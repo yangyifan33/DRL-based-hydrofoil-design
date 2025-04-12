@@ -12,11 +12,11 @@ def orthogonal_init(layer, gain=1.0):
     nn.init.constant_(layer.bias, 0)
 
 class PolicyNetwork(nn.Module):
-    def __init__(self, state_dim, action_dim):
+    def __init__(self, state_dim, action_dim, hidden_width):
         super(PolicyNetwork, self).__init__()
-        self.fc1 = nn.Linear(state_dim, 128)
-        self.fc2 = nn.Linear(128, 128)
-        self.mean_layer = nn.Linear(128, action_dim)
+        self.fc1 = nn.Linear(state_dim, hidden_width)
+        self.fc2 = nn.Linear(hidden_width, hidden_width)
+        self.mean_layer = nn.Linear(hidden_width, action_dim)
         self.log_std = nn.Parameter(torch.zeros(1, action_dim))
         orthogonal_init(self.fc1)
         orthogonal_init(self.fc2)
@@ -36,11 +36,11 @@ class PolicyNetwork(nn.Module):
         return dist
 
 class ValueNetwork(nn.Module):
-    def __init__(self, state_dim):
+    def __init__(self, state_dim, hidden_width):
         super(ValueNetwork, self).__init__()
-        self.fc1 = nn.Linear(state_dim, 128)
-        self.fc2 = nn.Linear(128, 128)
-        self.fc3 = nn.Linear(128, 1)
+        self.fc1 = nn.Linear(state_dim, hidden_width)
+        self.fc2 = nn.Linear(hidden_width, hidden_width)
+        self.fc3 = nn.Linear(hidden_width, 1)
         orthogonal_init(self.fc1)
         orthogonal_init(self.fc2)
         orthogonal_init(self.fc3)
@@ -51,28 +51,25 @@ class ValueNetwork(nn.Module):
         return self.fc3(x)
 
 class Agent():
-    def __init__(self, state_dim, action_dim, gamma, lamda, batch_size, mini_batch_size, lr_a, lr_c, epochs, epsilon, episode_num):
+    def __init__(self, args, episode_num):
         
-        self.lr_a = lr_a
-        self.lr_c = lr_c
+        self.lr_a = args.lr_a
+        self.lr_c = args.lr_c
 
-        self.policy_net = PolicyNetwork(state_dim, action_dim)
-        self.value_net = ValueNetwork(state_dim)
+        self.policy_net = PolicyNetwork(args.state_dim, args.action_dim, args.hidden_width)
+        self.value_net = ValueNetwork(args.state_dim, args.hidden_width)
 
         self.optimizer_policy = torch.optim.Adam(self.policy_net.parameters(), lr=self.lr_a, eps=1e-5)
         self.optimizer_value = torch.optim.Adam(self.value_net.parameters(), lr=self.lr_c, eps=1e-5)
 
-        self.gamma = gamma
-        self.lamda = lamda
-        self.epsilon = epsilon
+        self.gamma = args.gamma
+        self.lamda = args.lamda
+        self.epsilon = args.epsilon
 
-        self.batch_size = batch_size
-        self.mini_batch_size = mini_batch_size
-        self.epochs = epochs
+        self.batch_size = args.batch_size
+        self.mini_batch_size = args.mini_batch_size
+        self.epochs = args.epochs
         self.episode_num = episode_num
-
-        self.max_action = torch.tensor([0.75, 0.02]).view(1,2)
-        self.min_action = torch.tensor([-0.75, -0.02]).view(1,2)
 
     def choose_action(self, state):
         state = torch.unsqueeze(torch.tensor(state, dtype=torch.float), 0)

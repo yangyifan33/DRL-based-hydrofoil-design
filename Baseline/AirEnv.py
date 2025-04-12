@@ -79,8 +79,8 @@ class AirfoilEnv(gym.Env):
 
         return self.state, reward, done, {}
 
-    def step_for_infer(self, action):
-        
+    def step_for_infer(self, action): #step for inference,remove the computation and updating for reward 
+
         self.current_step += 1
 
         # undate AoA and camber
