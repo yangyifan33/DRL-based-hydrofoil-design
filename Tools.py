@@ -89,7 +89,7 @@ def calculate_statistics(data):
     max_value = np.max(data)
     return mean_value, min_value, max_value
 
-def generate_env():
+def generate_target_Cl():
     '''
     generate a random environment for the training stage 3, 
     where the environment will be new environemt with probability 0.8 and
