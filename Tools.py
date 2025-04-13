@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import argparse
 from scipy.interpolate import interp1d
+import AirEnv as Air
 import os
 
 def check_and_create_dir():
@@ -29,9 +30,26 @@ def Hyperparameters():
     parser.add_argument("--epsilon", type=float, default=0.2, help="PPO clip parameter")
     parser.add_argument("--epochs", type=int, default=4, help="PPO parameter")
 
+    #seeting for the experiments
+    parser.add_argument("--Use_support_dimensions", type=bool, default=False, help="Experiment 1: Use support dimensions")
+    parser.add_argument("--Remove_target_Cl", type=bool, default=False, help="Experiment 2: Remove target Cl")
+    parser.add_argument("--Use_all_equal_rewards_coe", type=bool, default=False, help="Experiment 3: Use all equal rewards coefficients")
+    parser.add_argument("--Remove_stage_wise_random)", type=bool, default=False, help="Experiment 4: Remove stage wise random")
+    parser.add_argument("--Random_frequancy", type=int, default=10, help="Experiment 5: Optimize the random frequency")
+    
     args = parser.parse_args()
     return args
-
+def Generate_env(args, target_lift_coefficient):
+    '''
+    generate the environment according to the hyperparameters
+    '''
+    if args.Use_support_dimensions:
+        env = Air.AirfoilEnvSD(target_lift_coefficient=target_lift_coefficient)    
+    elif args.Remove_target_Cl:
+        env = Air.AirfoilEnv2D(target_lift_coefficient=target_lift_coefficient)
+    else:
+        env = Air.AirfoilEnv(target_lift_coefficient=target_lift_coefficient, all_equal_rewards_coe=args.Use_all_equal_rewards_coe)
+    return env
 
 def plot_reward(reward_vec, start_episode, num_episodes, env_random_mod):
     reward_np = np.array(reward_vec)
