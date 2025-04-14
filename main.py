@@ -161,8 +161,7 @@ def train(args, agent, num_episodes=1000, env_random_mod = 0, load_point = 0):
                        reward_vec = reward_vec,f_scaling_coe = f_scaling_coe, save_path='./checkpoint/ckpt_%d_ranmod_%d_.pth' % (episode, env_random_mod))
     
     #Plot the reward curve at the end of each stage
-    Tools.plot_reward(reward_vec, start_episode, num_episodes, env_random_mod)
-
+    reward_np = Tools.plot_reward(reward_vec, start_episode, num_episodes, env_random_mod)
     return reward_np
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')

@@ -61,6 +61,7 @@ def plot_reward(reward_vec, start_episode, num_episodes, env_random_mod):
         plt.pause(5)
         plt.savefig(reward_pathname)
         plt.close()
+    return reward_np
 
 def plot_histogram(data, target_lift_coefficient, num_samples):
     """
