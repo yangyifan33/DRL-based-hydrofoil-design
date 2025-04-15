@@ -1,6 +1,6 @@
 # DRL-based-hydrofoil-design
 
-This is the code repository of the paper: **A Deep Reinforcement Learning Based Design Method for the Hydrofoil Shape**. The code used for baseline and four experiments is in here.
+This is the code repository of the paper: **A Deep Reinforcement Learning Based Design Method for the Hydrofoil Shape** [1]. The code used for baseline and four experiments is in here.
 
 We storage all basic code we used in our study:
 
@@ -15,8 +15,10 @@ We storage all basic code we used in our study:
 - **Tools.py**: contains some tools in our study:
   - `Generate_env()`: generate the environment under different experiment sittings. 
   - `check_and_create_dir()`: check and create all folders we needs before the training.
-  - `Hyperparameters()`: setting all hyperparameters in PPO.
+  - `Hyperparameters()`: setting all hyperparameters in PPO and settings in our 5 experiments.
   - `plot_reward()`: plot the learning curve after finushing each stage of training.
   - `plot_histogram()`: plot the histogram of the steps the agent used during the testing.
   - `calculate_statistics()`: compute the maximum, minimum and mean of the steps the agent used during the testing.
   - `generate_target_Cl()`: generate the $Cl_{target}$ for the Stage 3 of traing.
+
+[1] Yang, Y., & Wang, Y. (n.d.). A Deep Reinforcement Learning Based Design Method for the Hydrofoil Shape.
