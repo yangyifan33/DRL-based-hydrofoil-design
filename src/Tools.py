@@ -34,14 +34,17 @@ def Hyperparameters():
     parser.add_argument("--Use_support_dimensions", type=bool, default=False, help="Experiment 1: Use support dimensions")
     parser.add_argument("--Remove_target_Cl", type=bool, default=False, help="Experiment 2: Remove target Cl")
     parser.add_argument("--Use_all_equal_rewards_coe", type=bool, default=False, help="Experiment 3: Use all equal rewards coefficients")
-    parser.add_argument("--Remove_stage_wise_random)", type=bool, default=False, help="Experiment 4: Remove stage wise random")
+    parser.add_argument("--Remove_stage_wise_random", type=bool, default=False, help="Experiment 4: Remove stage wise random")
     parser.add_argument("--Random_frequancy", type=int, default=10, help="Experiment 5: Optimize the random frequency")
     
     args = parser.parse_args()
     return args
 def Generate_env(args, target_lift_coefficient):
     '''
-    generate the environment according to the hyperparameters
+    generate the environment according to the setting of experiments, 
+    experiment 1 and 2 using different AirfoilEnv class
+    expeirment 3 and baseline using the same AirfoilEnv class, but different reward coefficients
+    experiment 4 and 5 using the same AirfoilEnv class, but different training process
     '''
     if args.Use_support_dimensions:
         env = Air.AirfoilEnvSD(target_lift_coefficient=target_lift_coefficient)    

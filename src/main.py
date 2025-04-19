@@ -58,35 +58,35 @@ def train(args, agent, num_episodes=1000, env_random_mod = 0, load_point = 0):
     agent.lr_reset()
     agent.episodes_reset(num_episodes)
     
-    # Initalize the reward scalar at the beginning of the training
-    if start_episode == 0 and env_random_mod == 0:
-        print("\n--- Running environment parameter sampling ---")
-        param_values = np.linspace(0, 1.5, 10) # uniform sampling of target lift coefficient
-        std_values = []
+    # # Initalize the reward scalar at the beginning of the training
+    # if start_episode == 0 and env_random_mod == 0:
+    #     print("\n--- Running environment parameter sampling ---")
+    #     param_values = np.linspace(0, 1.5, 10) # uniform sampling of target lift coefficient
+    #     std_values = []
 
-        for param in param_values:
-            init_env = Air.AirfoilEnv(target_lift_coefficient=param)
-            all_rewards = []
-            for _ in range(2000):
-                state = init_env.reset()
-                done = False
-                action = init_env.action_space.sample()  # sample random action
-                next_state, reward, done, _ = init_env.step(action)
-                all_rewards.append(reward)
-                if done:
-                    break
+    #     for param in param_values:
+    #         init_env = Air.AirfoilEnv(target_lift_coefficient=param)
+    #         all_rewards = []
+    #         for _ in range(2000):
+    #             state = init_env.reset()
+    #             done = False
+    #             action = init_env.action_space.sample()  # sample random action
+    #             next_state, reward, done, _ = init_env.step(action)
+    #             all_rewards.append(reward)
+    #             if done:
+    #                 break
             
-            # compute the standard deviation of rewards
-            if len(all_rewards) > 1:
-                reward_std = np.std(all_rewards)
-                reward_std = 1.0 if np.isclose(reward_std, 0) else reward_std
-            else:
-                reward_std = 1.0
-            std_values.append(reward_std)
-            print(f"Param: {param:.2f}, Reward Std: {reward_std:.4f}")
-        # create interpolation function for reward scaling
-        f_scaling_coe = interp1d(param_values, std_values, kind='linear', fill_value="extrapolate")
-        print("\n--- Reward scaling interpolation function created ---\n")
+    #         # compute the standard deviation of rewards
+    #         if len(all_rewards) > 1:
+    #             reward_std = np.std(all_rewards)
+    #             reward_std = 1.0 if np.isclose(reward_std, 0) else reward_std
+    #         else:
+    #             reward_std = 1.0
+    #         std_values.append(reward_std)
+    #         print(f"Param: {param:.2f}, Reward Std: {reward_std:.4f}")
+    #     # create interpolation function for reward scaling
+    #     f_scaling_coe = interp1d(param_values, std_values, kind='linear', fill_value="extrapolate")
+    #     print("\n--- Reward scaling interpolation function created ---\n")
     
 # main training loop
     # Experiment 5: Optimize the random frequency
@@ -102,12 +102,19 @@ def train(args, agent, num_episodes=1000, env_random_mod = 0, load_point = 0):
             else:
                 hold += 1
         elif env_random_mod == 2:
-            target_lift_coefficient = Tools.generate_env()
+            target_lift_coefficient = Tools.generate_target_Cl()
             if hold == args.Random_frequancy - 1:   #optimize the random frequancy
-                target_lift_coefficient = Tools.generate_env()
+                target_lift_coefficient = Tools.generate_target_Cl()
                 hold = 0
             else:
                 hold += 1 
+        elif env_random_mod == 3: # environment with different target lift coefficient in 0-1.5
+            target_lift_coefficient = np.random.uniform(0, 1.5)
+            if hold == args.Random_frequancy - 1:   #optimize the random frequancy
+                target_lift_coefficient = np.random.uniform(0, 1.5)
+                hold = 0
+            else:
+                hold += 1
 
         #scaling_coe = f_scaling_coe(target_lift_coefficient) # get the scaling coefficient
         episode_rewards = []
@@ -172,7 +179,7 @@ if __name__ == "__main__":
     # set the parameters
     args = Tools.Hyperparameters()
     seed = 10
-    env = Tools.Generate_env(args, target_lift_coefficient=1.5) # generate the environment according to the hyperparameters
+    env = Tools.Generate_env(args, target_lift_coefficient=1.5) # generate the environment according to the setting of experiments
     env.seed(seed)
     env.action_space.seed(seed)
     np.random.seed(seed)
@@ -188,7 +195,7 @@ if __name__ == "__main__":
     
     # Experiment 4: Remove stage wise random
     if args.Remove_stage_wise_random:
-        reward_np = train(args, agent, num_episodes=4499, env_random_mod=2, load_point=0)
+        reward_np = train(args, agent, num_episodes=4499, env_random_mod=3, load_point=0)
 
     else:
     # baseline: 3 training stages
