@@ -15,23 +15,16 @@ We storage all basic code we used in our study:
 - **Tools.py**: contains some tools in our study:
   - `Generate_env()`: generate the environment under different experiment sittings. 
   - `check_and_create_dir()`: check and create all folders we needs before the training.
-<<<<<<< HEAD
   - `Hyperparameters()`: setting all hyperparameters in PPO and setting of experiments.
-=======
   - `Hyperparameters()`: setting all hyperparameters in PPO and settings in our 5 experiments.
->>>>>>> 9d477417dbcc6d102e12424e1136993b51df058a
   - `plot_reward()`: plot the learning curve after finushing each stage of training.
   - `plot_histogram()`: plot the histogram of the steps the agent used during the testing.
   - `calculate_statistics()`: compute the maximum, minimum and mean of the steps the agent used during the testing.
   - `generate_target_Cl()`: generate the $Cl_{target}$ for the Stage 3 of traing.
-
-<<<<<<< HEAD
 When running different experiments, just modify the last 5 parameters of `Hyperparameters()`.
 
 This project partially refers to the PPO implementation from:
 Lizhi, "ppo-pytorch", GitHub repository: https://github.com/Lizhi-sjtu/ppo-pytorch
-
 Licensed under the MIT License.
-=======
+
 [1] Yang, Y., & Wang, Y. (n.d.). A Deep Reinforcement Learning Based Design Method for the Hydrofoil Shape.
->>>>>>> 9d477417dbcc6d102e12424e1136993b51df058a
