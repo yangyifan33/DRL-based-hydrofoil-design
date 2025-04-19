@@ -1,6 +1,6 @@
 # DRL-based-hydrofoil-design
 
-This is the code repository of the paper: **A Deep Reinforcement Learning Based Design Method for the Hydrofoil Shape** [1]. The code used for baseline and four experiments is in here.
+This is the code repository of the paper: **A Deep Reinforcement Learning Based Design Method for the Hydrofoil Shape** [1]. The code used for baseline and four experiments is in the **src**.
 
 We storage all basic code we used in our study:
 
@@ -25,6 +25,6 @@ When running different experiments, just modify the last 5 parameters of `Hyperp
 
 This project partially refers to the PPO implementation from:
 Lizhi, "ppo-pytorch", GitHub repository: https://github.com/Lizhi-sjtu/ppo-pytorch
-Licensed under the MIT License.
+Licensed under the MIT License. These code is in **third_party**
 
 [1] Yang, Y., & Wang, Y. (n.d.). A Deep Reinforcement Learning Based Design Method for the Hydrofoil Shape.
